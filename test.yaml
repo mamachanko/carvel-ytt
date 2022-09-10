@@ -10,10 +10,9 @@ metadata:
 
 
 #@ def x(left):
-namespace: #@ x["name"]
+namespace: #@ left["metadata"]["name"]
 #@ end
 
 #@overlay/match by=overlay.subset({"kind": "Namespace"}), expects="0+"
 #@overlay/insert after=True, via=x
 ---
-

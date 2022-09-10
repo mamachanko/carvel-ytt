@@ -159,7 +159,7 @@ func (o Op) insertArrayItem(
 		return err
 	}
 
-	insertAnn, err := NewInsertAnnotation(newItem)
+	insertAnn, err := NewInsertAnnotation(newItem, o.Thread)
 	if err != nil {
 		return err
 	}

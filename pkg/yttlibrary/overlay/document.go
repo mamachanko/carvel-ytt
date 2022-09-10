@@ -156,7 +156,7 @@ func (o Op) insertDocument(
 		return err
 	}
 
-	insertAnn, err := NewInsertAnnotation(newDoc)
+	insertAnn, err := NewInsertAnnotation(newDoc, o.Thread)
 	if err != nil {
 		return err
 	}
