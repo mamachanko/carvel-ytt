@@ -169,12 +169,24 @@ func (o Op) insertDocument(
 			for _, leftIdx := range leftIdxs {
 				if leftIdx[0] == i && leftIdx[1] == j {
 					matched = true
+					// TODO mbrauer - here
+					newVal, err := insertAnn.Value(leftItem)
+					if err != nil {
+						return err
+					}
+
+					insertDoc := newDoc.DeepCopy()
+					err = insertDoc.SetValue(newVal)
+					if err != nil {
+						return err
+					}
+
 					if insertAnn.IsBefore() {
-						updatedDocs = append(updatedDocs, newDoc.DeepCopy())
+						updatedDocs = append(updatedDocs, insertDoc)
 					}
 					updatedDocs = append(updatedDocs, leftItem)
 					if insertAnn.IsAfter() {
-						updatedDocs = append(updatedDocs, newDoc.DeepCopy())
+						updatedDocs = append(updatedDocs, insertDoc)
 					}
 					break
 				}

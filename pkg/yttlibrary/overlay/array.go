@@ -171,6 +171,7 @@ func (o Op) insertArrayItem(
 		for _, leftIdx := range leftIdxs {
 			if i == leftIdx {
 				matched = true
+				// TODO mbrauer - here
 				if insertAnn.IsBefore() {
 					updatedItems = append(updatedItems, newItem.DeepCopy())
 				}

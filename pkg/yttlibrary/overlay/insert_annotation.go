@@ -5,7 +5,6 @@ package overlay
 
 import (
 	"fmt"
-
 	"github.com/k14s/starlark-go/starlark"
 	"github.com/vmware-tanzu/carvel-ytt/pkg/template"
 	tplcore "github.com/vmware-tanzu/carvel-ytt/pkg/template/core"
@@ -61,3 +60,8 @@ func NewInsertAnnotation(newItem template.EvaluationNode) (InsertAnnotation, err
 
 func (a InsertAnnotation) IsBefore() bool { return a.before }
 func (a InsertAnnotation) IsAfter() bool  { return a.after }
+
+func (a InsertAnnotation) Value(existingNode template.EvaluationNode) (interface{}, error) {
+	newNode := a.newItem.DeepCopyAsInterface().(template.EvaluationNode)
+	return newNode.GetValues()[0], nil
+}

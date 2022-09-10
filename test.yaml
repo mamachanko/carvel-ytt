@@ -1,0 +1,19 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@ for i in range(3):
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ i
+#@ end
+
+
+#@ def x(left):
+namespace: #@ x["name"]
+#@ end
+
+#@overlay/match by=overlay.subset({"kind": "Namespace"}), expects="0+"
+#@overlay/insert after=True, via=x
+---
+
