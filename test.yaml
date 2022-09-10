@@ -8,6 +8,10 @@ metadata:
   name: #@ i
 #@ end
 
+#@ for i in range(3):
+---
+item: #@ i
+#@ end
 
 #@ def x(left):
 namespace: #@ left["metadata"]["name"]
@@ -16,3 +20,8 @@ namespace: #@ left["metadata"]["name"]
 #@overlay/match by=overlay.subset({"kind": "Namespace"}), expects="0+"
 #@overlay/insert after=True, via=x
 ---
+
+#@overlay/match by=lambda i, left, right: "item" in left, expects="0+"
+#@overlay/insert after=True, via=lambda left: {"from_item": left["item"], "after": True}
+---
+hello: max
