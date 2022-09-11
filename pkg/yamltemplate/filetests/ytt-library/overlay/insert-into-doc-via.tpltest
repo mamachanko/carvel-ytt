@@ -1,0 +1,48 @@
+#@ load("@ytt:template", "template")
+#@ load("@ytt:overlay", "overlay")
+
+#@ def test1_left():
+---
+item: 1
+---
+item: 2
+---
+item: 3
+#@ end
+
+#@ def test1_right():
+#@overlay/match by=lambda i, l, r: "item" in l, expects=3
+#@overlay/insert before=True, via=lambda l: {"from_item": l["item"], "before": True}
+---
+#@overlay/match by=lambda i, l, r: "item" in l, expects=3
+#@overlay/insert after=True, via=lambda l: {"from_item": l["item"], "after": True}
+---
+#@ end
+
+--- #@ template.replace(overlay.apply(test1_left(), test1_right()))
+
++++
+
+from_item: 1
+before: true
+---
+item: 1
+---
+from_item: 1
+after: true
+---
+from_item: 2
+before: true
+---
+item: 2
+---
+from_item: 2
+after: true
+---
+from_item: 3
+before: true
+---
+item: 3
+---
+from_item: 3
+after: true

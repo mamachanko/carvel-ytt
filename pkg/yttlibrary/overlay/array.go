@@ -171,13 +171,23 @@ func (o Op) insertArrayItem(
 		for _, leftIdx := range leftIdxs {
 			if i == leftIdx {
 				matched = true
-				// TODO mbrauer - here
+
+				newVal, err := insertAnn.Value(leftItem)
+				if err != nil {
+					return err
+				}
+				insertItem := newItem.DeepCopy()
+				err = insertItem.SetValue(newVal)
+				if err != nil {
+					return err
+				}
+
 				if insertAnn.IsBefore() {
-					updatedItems = append(updatedItems, newItem.DeepCopy())
+					updatedItems = append(updatedItems, insertItem)
 				}
 				updatedItems = append(updatedItems, leftItem)
 				if insertAnn.IsAfter() {
-					updatedItems = append(updatedItems, newItem.DeepCopy())
+					updatedItems = append(updatedItems, insertItem)
 				}
 				break
 			}

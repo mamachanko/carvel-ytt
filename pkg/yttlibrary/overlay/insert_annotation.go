@@ -47,21 +47,21 @@ func NewInsertAnnotation(newItem template.EvaluationNode, thread *starlark.Threa
 		kwargName := string(kwarg[0].(starlark.String))
 
 		switch kwargName {
-		case "before":
+		case InsertAnnotationKwargBefore:
 			resultBool, err := tplcore.NewStarlarkValue(kwarg[1]).AsBool()
 			if err != nil {
 				return InsertAnnotation{}, err
 			}
 			annotation.before = resultBool
 
-		case "after":
+		case InsertAnnotationKwargAfter:
 			resultBool, err := tplcore.NewStarlarkValue(kwarg[1]).AsBool()
 			if err != nil {
 				return InsertAnnotation{}, err
 			}
 			annotation.after = resultBool
 
-		case "via":
+		case InsertAnnotationKwargVia:
 			annotation.via = &kwarg[1]
 
 		default:
@@ -86,7 +86,6 @@ func (a InsertAnnotation) Value(existingNode template.EvaluationNode) (interface
 	case starlark.Callable:
 		var existingVal interface{}
 		if existingNode != nil {
-			// Make sure original nodes are not affected in any way
 			existingVal = existingNode.DeepCopyAsInterface().(template.EvaluationNode).GetValues()[0]
 		} else {
 			existingVal = nil
@@ -96,7 +95,6 @@ func (a InsertAnnotation) Value(existingNode template.EvaluationNode) (interface
 			yamltemplate.NewGoValueWithYAML(existingVal).AsStarlarkValue(),
 		}
 
-		// TODO check thread correctness
 		result, err := starlark.Call(a.thread, *a.via, viaArgs, []starlark.Tuple{})
 		if err != nil {
 			return nil, err
